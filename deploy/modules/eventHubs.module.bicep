@@ -30,12 +30,14 @@ resource namespace 'Microsoft.EventHub/namespaces@2021-06-01-preview' = {
 }
 
 resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2021-06-01-preview' = {
-  name: '${namespace.name}/${eventHubName}'
+  parent: namespace
+  name: eventHubName
   properties: {}
 }
 
 resource authRule 'Microsoft.EventHub/namespaces/authorizationRules@2021-06-01-preview' = {
-  name: '${namespace.name}/AppAuthRule'
+  parent: namespace
+  name: 'AppAuthRule'
   properties: {
     rights: [
       'Listen'
@@ -45,7 +47,8 @@ resource authRule 'Microsoft.EventHub/namespaces/authorizationRules@2021-06-01-p
 }
 
 resource consumerGroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-06-01-preview' = {
-  name: '${eventHub.name}/${consumerGroupName}'
+  parent: eventHub
+  name: consumerGroupName
   properties: {}  
 }
 

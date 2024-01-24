@@ -1,7 +1,9 @@
 SUBSCRIPTION_ID=xxx
-LOCATION=westeurope
+LOCATION=northeurope
+DEPLOYMENT_NAME="azuredeploy-$LOCATION-$(date +%s)"
 
 OUTPUTS=$(az deployment sub create \
+  --name $DEPLOYMENT_NAME \
   --location $LOCATION \
   --template-file ./azure.deploy.bicep \
   --parameters ./azure.deploy.parameters.json \

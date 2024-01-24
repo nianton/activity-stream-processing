@@ -27,7 +27,7 @@ var funcStorageName = 's${replace(name, '-', '')}'
 var funcAppInsName = 'appins-${name}'
 var createSourceControl = !empty(funcDeployRepoUrl)
 var createNetworkConfig = !empty(subnetIdForIntegration)
-var createAppInsights = empty(appInsInstrumentationKey)
+var existingAppInsights = !empty(appInsInstrumentationKey)
 var siteConfigAddin = linux ? {
   linuxFxVersion:  'Java|11'
   javaVersion: '11'
@@ -44,7 +44,7 @@ module funcStorage './storage.module.bicep' = {
   }
 }
 
-module funcAppIns './appInsights.module.bicep' = if (createAppInsights) {
+module funcAppIns './appInsights.module.bicep' = if (!existingAppInsights) {
   name: funcAppInsName
   params: {
     name: funcAppInsName
@@ -54,7 +54,7 @@ module funcAppIns './appInsights.module.bicep' = if (createAppInsights) {
   }
 }
 
-resource funcAppServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
+resource funcAppServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
   name: funcAppServicePlanName
   location: location
   tags: tags
@@ -67,7 +67,7 @@ resource funcAppServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   }
 }
 
-resource funcApp 'Microsoft.Web/sites@2020-06-01' = {
+resource funcApp 'Microsoft.Web/sites@2022-09-01' = {
   name: name
   location: location
   kind: linux ? 'functionapp,linux' : 'functionapp'
@@ -104,11 +104,11 @@ resource funcApp 'Microsoft.Web/sites@2020-06-01' = {
         }
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: createAppInsights ? funcAppIns.outputs.instrumentationKey : appInsInstrumentationKey
+          value: existingAppInsights ? appInsInstrumentationKey : funcAppIns.outputs.instrumentationKey 
         }
         {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: 'InstrumentationKey=${createAppInsights ? funcAppIns.outputs.instrumentationKey : appInsInstrumentationKey}'
+          value: 'InstrumentationKey=${existingAppInsights ? appInsInstrumentationKey : funcAppIns.outputs.instrumentationKey}'
         }
       ], funcAppSettings)
     }, siteConfigAddin)
@@ -119,15 +119,17 @@ resource funcApp 'Microsoft.Web/sites@2020-06-01' = {
   tags: tags
 }
 
-resource networkConfig 'Microsoft.Web/sites/networkConfig@2020-06-01' = if (createNetworkConfig) {
-  name: '${funcApp.name}/VirtualNetwork'
+resource networkConfig 'Microsoft.Web/sites/networkConfig@2022-09-01' = if (createNetworkConfig) {
+  parent: funcApp
+  name: 'virtualNetwork'
   properties: {
     subnetResourceId: subnetIdForIntegration
   }
 }
 
-resource funcAppSourceControl 'Microsoft.Web/sites/sourcecontrols@2020-06-01' = if (createSourceControl) {
-  name: '${funcApp.name}/web'
+resource funcAppSourceControl 'Microsoft.Web/sites/sourcecontrols@2022-09-01' = if (createSourceControl) {
+  parent: funcApp
+  name: 'web'
   properties: {
     branch: funcDeployBranch
     repoUrl: funcDeployRepoUrl
@@ -135,8 +137,9 @@ resource funcAppSourceControl 'Microsoft.Web/sites/sourcecontrols@2020-06-01' = 
   }
 }
 
-resource sampleFunction 'Microsoft.Web/sites/functions@2020-06-01' = if (includeSampleFunction) {
-  name: '${funcApp.name}/sampleFunction'
+resource sampleFunction 'Microsoft.Web/sites/functions@2022-09-01' = if (includeSampleFunction) {
+  parent: funcApp
+  name: 'sampleFunction'
   properties: {
     config: {
       bindings: [
@@ -171,5 +174,5 @@ output identity object = {
   principalId: funcApp.identity.principalId
   type: funcApp.identity.type
 }
-output applicationInsights object = funcAppIns
+output applicationInsights object = existingAppInsights ? {} : funcAppIns
 output storage object = funcStorage
