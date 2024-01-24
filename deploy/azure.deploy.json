@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.10.61.36676",
-      "templateHash": "4354627548666713841"
+      "version": "0.24.24.22086",
+      "templateHash": "4817568114155507650"
     }
   },
   "parameters": {
@@ -53,7 +53,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "NamingDeployment",
       "resourceGroup": "[format('rg-{0}-{1}', parameters('applicationName'), parameters('environment'))]",
       "properties": {
@@ -84,8 +84,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "5387546858657616694"
+              "version": "0.24.24.22086",
+              "templateHash": "8289305954335237897"
             }
           },
           "parameters": {
@@ -1201,7 +1201,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "MainDeployment",
       "resourceGroup": "[format('rg-{0}-{1}', parameters('applicationName'), parameters('environment'))]",
       "properties": {
@@ -1217,7 +1217,7 @@
             "value": "[parameters('environmentType')]"
           },
           "naming": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('rg-{0}-{1}', parameters('applicationName'), parameters('environment'))), 'Microsoft.Resources/deployments', 'NamingDeployment')).outputs.names.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('rg-{0}-{1}', parameters('applicationName'), parameters('environment'))), 'Microsoft.Resources/deployments', 'NamingDeployment'), '2022-09-01').outputs.names.value]"
           },
           "sendGridApiKey": {
             "value": "[parameters('sendGridApiKey')]"
@@ -1232,8 +1232,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.10.61.36676",
-              "templateHash": "8146427983400702082"
+              "version": "0.24.24.22086",
+              "templateHash": "15048681646908912785"
             }
           },
           "parameters": {
@@ -1285,7 +1285,7 @@
           "resources": [
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-10-01",
+              "apiVersion": "2022-09-01",
               "name": "dataStorageAccount",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -1315,8 +1315,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.10.61.36676",
-                      "templateHash": "12323776842840638647"
+                      "version": "0.24.24.22086",
+                      "templateHash": "10353758846968854005"
                     }
                   },
                   "parameters": {
@@ -1388,7 +1388,7 @@
                     },
                     "primaryEndpoints": {
                       "type": "object",
-                      "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', toLower(take(replace(parameters('name'), '-', ''), 24)))).primaryEndpoints]"
+                      "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', toLower(take(replace(parameters('name'), '-', ''), 24))), '2019-06-01').primaryEndpoints]"
                     },
                     "connectionString": {
                       "type": "string",
@@ -1400,7 +1400,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-10-01",
+              "apiVersion": "2022-09-01",
               "name": "applicationInsights",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -1424,8 +1424,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.10.61.36676",
-                      "templateHash": "5073464841099753282"
+                      "version": "0.24.24.22086",
+                      "templateHash": "2649765130137150666"
                     }
                   },
                   "parameters": {
@@ -1484,7 +1484,7 @@
                     },
                     "instrumentationKey": {
                       "type": "string",
-                      "value": "[reference(resourceId('Microsoft.Insights/components', parameters('name'))).InstrumentationKey]"
+                      "value": "[reference(resourceId('Microsoft.Insights/components', parameters('name')), '2020-02-02-preview').InstrumentationKey]"
                     },
                     "workspaceId": {
                       "type": "string",
@@ -1496,7 +1496,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-10-01",
+              "apiVersion": "2022-09-01",
               "name": "ingestFuncApp",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -1520,7 +1520,7 @@
                     "value": "[variables('functionSkuName')]"
                   },
                   "appInsInstrumentationKey": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'applicationInsights')).outputs.instrumentationKey.value]"
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'applicationInsights'), '2022-09-01').outputs.instrumentationKey.value]"
                   },
                   "funcAppSettings": {
                     "value": [
@@ -1531,6 +1531,10 @@
                       {
                         "name": "EventHubsConnection",
                         "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', variables('resourceNames').keyVault, variables('secretNames').eventHubsNamespaceConnectionString)]"
+                      },
+                      {
+                        "name": "EventHubName",
+                        "value": "[variables('resourceNames').eventHub]"
                       }
                     ]
                   }
@@ -1541,8 +1545,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.10.61.36676",
-                      "templateHash": "6997060388742353439"
+                      "version": "0.24.24.22086",
+                      "templateHash": "7295515986540276094"
                     }
                   },
                   "parameters": {
@@ -1615,13 +1619,13 @@
                     "funcAppInsName": "[format('appins-{0}', parameters('name'))]",
                     "createSourceControl": "[not(empty(parameters('funcDeployRepoUrl')))]",
                     "createNetworkConfig": "[not(empty(parameters('subnetIdForIntegration')))]",
-                    "createAppInsights": "[empty(parameters('appInsInstrumentationKey'))]",
+                    "existingAppInsights": "[not(empty(parameters('appInsInstrumentationKey')))]",
                     "siteConfigAddin": "[if(parameters('linux'), createObject('linuxFxVersion', 'Java|11', 'javaVersion', '11'), createObject('javaVersion', '11'))]"
                   },
                   "resources": [
                     {
                       "type": "Microsoft.Web/serverfarms",
-                      "apiVersion": "2020-06-01",
+                      "apiVersion": "2022-09-01",
                       "name": "[variables('funcAppServicePlanName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -1635,7 +1639,7 @@
                     },
                     {
                       "type": "Microsoft.Web/sites",
-                      "apiVersion": "2020-06-01",
+                      "apiVersion": "2022-09-01",
                       "name": "[parameters('name')]",
                       "location": "[parameters('location')]",
                       "kind": "[if(parameters('linux'), 'functionapp,linux', 'functionapp')]",
@@ -1644,7 +1648,7 @@
                       },
                       "properties": {
                         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('funcAppServicePlanName'))]",
-                        "siteConfig": "[union(createObject('appSettings', concat(createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', parameters('funcExtensionVersion')), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', parameters('funcWorkerRuntime')), createObject('name', 'AzureWebJobsDashboard', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName'))).outputs.connectionString.value), createObject('name', 'AzureWebJobsStorage', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName'))).outputs.connectionString.value), createObject('name', 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName'))).outputs.connectionString.value), createObject('name', 'WEBSITE_CONTENTSHARE', 'value', toLower(parameters('name'))), createObject('name', 'APPINSIGHTS_INSTRUMENTATIONKEY', 'value', if(variables('createAppInsights'), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2020-10-01').outputs.instrumentationKey.value, parameters('appInsInstrumentationKey'))), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', format('InstrumentationKey={0}', if(variables('createAppInsights'), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2020-10-01').outputs.instrumentationKey.value, parameters('appInsInstrumentationKey'))))), parameters('funcAppSettings'))), variables('siteConfigAddin'))]",
+                        "siteConfig": "[union(createObject('appSettings', concat(createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', parameters('funcExtensionVersion')), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', parameters('funcWorkerRuntime')), createObject('name', 'AzureWebJobsDashboard', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName')), '2022-09-01').outputs.connectionString.value), createObject('name', 'AzureWebJobsStorage', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName')), '2022-09-01').outputs.connectionString.value), createObject('name', 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName')), '2022-09-01').outputs.connectionString.value), createObject('name', 'WEBSITE_CONTENTSHARE', 'value', toLower(parameters('name'))), createObject('name', 'APPINSIGHTS_INSTRUMENTATIONKEY', 'value', if(variables('existingAppInsights'), parameters('appInsInstrumentationKey'), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2022-09-01').outputs.instrumentationKey.value)), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', format('InstrumentationKey={0}', if(variables('existingAppInsights'), parameters('appInsInstrumentationKey'), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2022-09-01').outputs.instrumentationKey.value)))), parameters('funcAppSettings'))), variables('siteConfigAddin'))]",
                         "httpsOnly": true,
                         "clientAffinityEnabled": false,
                         "reserved": "[parameters('linux')]"
@@ -1659,8 +1663,8 @@
                     {
                       "condition": "[variables('createNetworkConfig')]",
                       "type": "Microsoft.Web/sites/networkConfig",
-                      "apiVersion": "2020-06-01",
-                      "name": "[format('{0}/VirtualNetwork', parameters('name'))]",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('{0}/{1}', parameters('name'), 'virtualNetwork')]",
                       "properties": {
                         "subnetResourceId": "[parameters('subnetIdForIntegration')]"
                       },
@@ -1671,8 +1675,8 @@
                     {
                       "condition": "[variables('createSourceControl')]",
                       "type": "Microsoft.Web/sites/sourcecontrols",
-                      "apiVersion": "2020-06-01",
-                      "name": "[format('{0}/web', parameters('name'))]",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('{0}/{1}', parameters('name'), 'web')]",
                       "properties": {
                         "branch": "[parameters('funcDeployBranch')]",
                         "repoUrl": "[parameters('funcDeployRepoUrl')]",
@@ -1685,8 +1689,8 @@
                     {
                       "condition": "[parameters('includeSampleFunction')]",
                       "type": "Microsoft.Web/sites/functions",
-                      "apiVersion": "2020-06-01",
-                      "name": "[format('{0}/sampleFunction', parameters('name'))]",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('{0}/{1}', parameters('name'), 'sampleFunction')]",
                       "properties": {
                         "config": {
                           "bindings": [
@@ -1717,7 +1721,7 @@
                     },
                     {
                       "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2020-10-01",
+                      "apiVersion": "2022-09-01",
                       "name": "[variables('funcStorageName')]",
                       "properties": {
                         "expressionEvaluationOptions": {
@@ -1741,8 +1745,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.10.61.36676",
-                              "templateHash": "12323776842840638647"
+                              "version": "0.24.24.22086",
+                              "templateHash": "10353758846968854005"
                             }
                           },
                           "parameters": {
@@ -1814,7 +1818,7 @@
                             },
                             "primaryEndpoints": {
                               "type": "object",
-                              "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', toLower(take(replace(parameters('name'), '-', ''), 24)))).primaryEndpoints]"
+                              "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', toLower(take(replace(parameters('name'), '-', ''), 24))), '2019-06-01').primaryEndpoints]"
                             },
                             "connectionString": {
                               "type": "string",
@@ -1825,9 +1829,9 @@
                       }
                     },
                     {
-                      "condition": "[variables('createAppInsights')]",
+                      "condition": "[not(variables('existingAppInsights'))]",
                       "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2020-10-01",
+                      "apiVersion": "2022-09-01",
                       "name": "[variables('funcAppInsName')]",
                       "properties": {
                         "expressionEvaluationOptions": {
@@ -1854,8 +1858,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.10.61.36676",
-                              "templateHash": "5073464841099753282"
+                              "version": "0.24.24.22086",
+                              "templateHash": "2649765130137150666"
                             }
                           },
                           "parameters": {
@@ -1914,7 +1918,7 @@
                             },
                             "instrumentationKey": {
                               "type": "string",
-                              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('name'))).InstrumentationKey]"
+                              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('name')), '2020-02-02-preview').InstrumentationKey]"
                             },
                             "workspaceId": {
                               "type": "string",
@@ -1941,18 +1945,18 @@
                     "identity": {
                       "type": "object",
                       "value": {
-                        "tenantId": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2020-06-01', 'full').identity.tenantId]",
-                        "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2020-06-01', 'full').identity.principalId]",
-                        "type": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2020-06-01', 'full').identity.type]"
+                        "tenantId": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2022-09-01', 'full').identity.tenantId]",
+                        "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2022-09-01', 'full').identity.principalId]",
+                        "type": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2022-09-01', 'full').identity.type]"
                       }
                     },
                     "applicationInsights": {
                       "type": "object",
-                      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2020-10-01').outputs]"
+                      "value": "[if(variables('existingAppInsights'), createObject(), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2022-09-01'))]"
                     },
                     "storage": {
                       "type": "object",
-                      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName'))).outputs]"
+                      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName')), '2022-09-01')]"
                     }
                   }
                 }
@@ -1963,7 +1967,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-10-01",
+              "apiVersion": "2022-09-01",
               "name": "processorFuncApp",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -1987,7 +1991,7 @@
                     "value": "[variables('functionSkuName')]"
                   },
                   "appInsInstrumentationKey": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'applicationInsights')).outputs.instrumentationKey.value]"
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'applicationInsights'), '2022-09-01').outputs.instrumentationKey.value]"
                   },
                   "funcAppSettings": {
                     "value": [
@@ -2002,6 +2006,14 @@
                       {
                         "name": "EventHubsConnection",
                         "value": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', variables('resourceNames').keyVault, variables('secretNames').eventHubsNamespaceConnectionString)]"
+                      },
+                      {
+                        "name": "EventHubName",
+                        "value": "[variables('resourceNames').eventHub]"
+                      },
+                      {
+                        "name": "EventHubConsumerGroup",
+                        "value": "[variables('resourceNames').eventHubConsumerGroup]"
                       }
                     ]
                   }
@@ -2012,8 +2024,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.10.61.36676",
-                      "templateHash": "6997060388742353439"
+                      "version": "0.24.24.22086",
+                      "templateHash": "7295515986540276094"
                     }
                   },
                   "parameters": {
@@ -2086,13 +2098,13 @@
                     "funcAppInsName": "[format('appins-{0}', parameters('name'))]",
                     "createSourceControl": "[not(empty(parameters('funcDeployRepoUrl')))]",
                     "createNetworkConfig": "[not(empty(parameters('subnetIdForIntegration')))]",
-                    "createAppInsights": "[empty(parameters('appInsInstrumentationKey'))]",
+                    "existingAppInsights": "[not(empty(parameters('appInsInstrumentationKey')))]",
                     "siteConfigAddin": "[if(parameters('linux'), createObject('linuxFxVersion', 'Java|11', 'javaVersion', '11'), createObject('javaVersion', '11'))]"
                   },
                   "resources": [
                     {
                       "type": "Microsoft.Web/serverfarms",
-                      "apiVersion": "2020-06-01",
+                      "apiVersion": "2022-09-01",
                       "name": "[variables('funcAppServicePlanName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -2106,7 +2118,7 @@
                     },
                     {
                       "type": "Microsoft.Web/sites",
-                      "apiVersion": "2020-06-01",
+                      "apiVersion": "2022-09-01",
                       "name": "[parameters('name')]",
                       "location": "[parameters('location')]",
                       "kind": "[if(parameters('linux'), 'functionapp,linux', 'functionapp')]",
@@ -2115,7 +2127,7 @@
                       },
                       "properties": {
                         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('funcAppServicePlanName'))]",
-                        "siteConfig": "[union(createObject('appSettings', concat(createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', parameters('funcExtensionVersion')), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', parameters('funcWorkerRuntime')), createObject('name', 'AzureWebJobsDashboard', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName'))).outputs.connectionString.value), createObject('name', 'AzureWebJobsStorage', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName'))).outputs.connectionString.value), createObject('name', 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName'))).outputs.connectionString.value), createObject('name', 'WEBSITE_CONTENTSHARE', 'value', toLower(parameters('name'))), createObject('name', 'APPINSIGHTS_INSTRUMENTATIONKEY', 'value', if(variables('createAppInsights'), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2020-10-01').outputs.instrumentationKey.value, parameters('appInsInstrumentationKey'))), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', format('InstrumentationKey={0}', if(variables('createAppInsights'), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2020-10-01').outputs.instrumentationKey.value, parameters('appInsInstrumentationKey'))))), parameters('funcAppSettings'))), variables('siteConfigAddin'))]",
+                        "siteConfig": "[union(createObject('appSettings', concat(createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', parameters('funcExtensionVersion')), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', parameters('funcWorkerRuntime')), createObject('name', 'AzureWebJobsDashboard', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName')), '2022-09-01').outputs.connectionString.value), createObject('name', 'AzureWebJobsStorage', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName')), '2022-09-01').outputs.connectionString.value), createObject('name', 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName')), '2022-09-01').outputs.connectionString.value), createObject('name', 'WEBSITE_CONTENTSHARE', 'value', toLower(parameters('name'))), createObject('name', 'APPINSIGHTS_INSTRUMENTATIONKEY', 'value', if(variables('existingAppInsights'), parameters('appInsInstrumentationKey'), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2022-09-01').outputs.instrumentationKey.value)), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', format('InstrumentationKey={0}', if(variables('existingAppInsights'), parameters('appInsInstrumentationKey'), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2022-09-01').outputs.instrumentationKey.value)))), parameters('funcAppSettings'))), variables('siteConfigAddin'))]",
                         "httpsOnly": true,
                         "clientAffinityEnabled": false,
                         "reserved": "[parameters('linux')]"
@@ -2130,8 +2142,8 @@
                     {
                       "condition": "[variables('createNetworkConfig')]",
                       "type": "Microsoft.Web/sites/networkConfig",
-                      "apiVersion": "2020-06-01",
-                      "name": "[format('{0}/VirtualNetwork', parameters('name'))]",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('{0}/{1}', parameters('name'), 'virtualNetwork')]",
                       "properties": {
                         "subnetResourceId": "[parameters('subnetIdForIntegration')]"
                       },
@@ -2142,8 +2154,8 @@
                     {
                       "condition": "[variables('createSourceControl')]",
                       "type": "Microsoft.Web/sites/sourcecontrols",
-                      "apiVersion": "2020-06-01",
-                      "name": "[format('{0}/web', parameters('name'))]",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('{0}/{1}', parameters('name'), 'web')]",
                       "properties": {
                         "branch": "[parameters('funcDeployBranch')]",
                         "repoUrl": "[parameters('funcDeployRepoUrl')]",
@@ -2156,8 +2168,8 @@
                     {
                       "condition": "[parameters('includeSampleFunction')]",
                       "type": "Microsoft.Web/sites/functions",
-                      "apiVersion": "2020-06-01",
-                      "name": "[format('{0}/sampleFunction', parameters('name'))]",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('{0}/{1}', parameters('name'), 'sampleFunction')]",
                       "properties": {
                         "config": {
                           "bindings": [
@@ -2188,7 +2200,7 @@
                     },
                     {
                       "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2020-10-01",
+                      "apiVersion": "2022-09-01",
                       "name": "[variables('funcStorageName')]",
                       "properties": {
                         "expressionEvaluationOptions": {
@@ -2212,8 +2224,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.10.61.36676",
-                              "templateHash": "12323776842840638647"
+                              "version": "0.24.24.22086",
+                              "templateHash": "10353758846968854005"
                             }
                           },
                           "parameters": {
@@ -2285,7 +2297,7 @@
                             },
                             "primaryEndpoints": {
                               "type": "object",
-                              "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', toLower(take(replace(parameters('name'), '-', ''), 24)))).primaryEndpoints]"
+                              "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', toLower(take(replace(parameters('name'), '-', ''), 24))), '2019-06-01').primaryEndpoints]"
                             },
                             "connectionString": {
                               "type": "string",
@@ -2296,9 +2308,9 @@
                       }
                     },
                     {
-                      "condition": "[variables('createAppInsights')]",
+                      "condition": "[not(variables('existingAppInsights'))]",
                       "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2020-10-01",
+                      "apiVersion": "2022-09-01",
                       "name": "[variables('funcAppInsName')]",
                       "properties": {
                         "expressionEvaluationOptions": {
@@ -2325,8 +2337,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.10.61.36676",
-                              "templateHash": "5073464841099753282"
+                              "version": "0.24.24.22086",
+                              "templateHash": "2649765130137150666"
                             }
                           },
                           "parameters": {
@@ -2385,7 +2397,7 @@
                             },
                             "instrumentationKey": {
                               "type": "string",
-                              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('name'))).InstrumentationKey]"
+                              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('name')), '2020-02-02-preview').InstrumentationKey]"
                             },
                             "workspaceId": {
                               "type": "string",
@@ -2412,18 +2424,18 @@
                     "identity": {
                       "type": "object",
                       "value": {
-                        "tenantId": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2020-06-01', 'full').identity.tenantId]",
-                        "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2020-06-01', 'full').identity.principalId]",
-                        "type": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2020-06-01', 'full').identity.type]"
+                        "tenantId": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2022-09-01', 'full').identity.tenantId]",
+                        "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2022-09-01', 'full').identity.principalId]",
+                        "type": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2022-09-01', 'full').identity.type]"
                       }
                     },
                     "applicationInsights": {
                       "type": "object",
-                      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2020-10-01').outputs]"
+                      "value": "[if(variables('existingAppInsights'), createObject(), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2022-09-01'))]"
                     },
                     "storage": {
                       "type": "object",
-                      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName'))).outputs]"
+                      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName')), '2022-09-01')]"
                     }
                   }
                 }
@@ -2434,7 +2446,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-10-01",
+              "apiVersion": "2022-09-01",
               "name": "notifierFuncApp",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -2458,7 +2470,7 @@
                     "value": "[variables('functionSkuName')]"
                   },
                   "appInsInstrumentationKey": {
-                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'applicationInsights')).outputs.instrumentationKey.value]"
+                    "value": "[reference(resourceId('Microsoft.Resources/deployments', 'applicationInsights'), '2022-09-01').outputs.instrumentationKey.value]"
                   },
                   "funcAppSettings": {
                     "value": [
@@ -2487,8 +2499,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.10.61.36676",
-                      "templateHash": "6997060388742353439"
+                      "version": "0.24.24.22086",
+                      "templateHash": "7295515986540276094"
                     }
                   },
                   "parameters": {
@@ -2561,13 +2573,13 @@
                     "funcAppInsName": "[format('appins-{0}', parameters('name'))]",
                     "createSourceControl": "[not(empty(parameters('funcDeployRepoUrl')))]",
                     "createNetworkConfig": "[not(empty(parameters('subnetIdForIntegration')))]",
-                    "createAppInsights": "[empty(parameters('appInsInstrumentationKey'))]",
+                    "existingAppInsights": "[not(empty(parameters('appInsInstrumentationKey')))]",
                     "siteConfigAddin": "[if(parameters('linux'), createObject('linuxFxVersion', 'Java|11', 'javaVersion', '11'), createObject('javaVersion', '11'))]"
                   },
                   "resources": [
                     {
                       "type": "Microsoft.Web/serverfarms",
-                      "apiVersion": "2020-06-01",
+                      "apiVersion": "2022-09-01",
                       "name": "[variables('funcAppServicePlanName')]",
                       "location": "[parameters('location')]",
                       "tags": "[parameters('tags')]",
@@ -2581,7 +2593,7 @@
                     },
                     {
                       "type": "Microsoft.Web/sites",
-                      "apiVersion": "2020-06-01",
+                      "apiVersion": "2022-09-01",
                       "name": "[parameters('name')]",
                       "location": "[parameters('location')]",
                       "kind": "[if(parameters('linux'), 'functionapp,linux', 'functionapp')]",
@@ -2590,7 +2602,7 @@
                       },
                       "properties": {
                         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('funcAppServicePlanName'))]",
-                        "siteConfig": "[union(createObject('appSettings', concat(createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', parameters('funcExtensionVersion')), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', parameters('funcWorkerRuntime')), createObject('name', 'AzureWebJobsDashboard', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName'))).outputs.connectionString.value), createObject('name', 'AzureWebJobsStorage', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName'))).outputs.connectionString.value), createObject('name', 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName'))).outputs.connectionString.value), createObject('name', 'WEBSITE_CONTENTSHARE', 'value', toLower(parameters('name'))), createObject('name', 'APPINSIGHTS_INSTRUMENTATIONKEY', 'value', if(variables('createAppInsights'), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2020-10-01').outputs.instrumentationKey.value, parameters('appInsInstrumentationKey'))), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', format('InstrumentationKey={0}', if(variables('createAppInsights'), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2020-10-01').outputs.instrumentationKey.value, parameters('appInsInstrumentationKey'))))), parameters('funcAppSettings'))), variables('siteConfigAddin'))]",
+                        "siteConfig": "[union(createObject('appSettings', concat(createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', parameters('funcExtensionVersion')), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', parameters('funcWorkerRuntime')), createObject('name', 'AzureWebJobsDashboard', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName')), '2022-09-01').outputs.connectionString.value), createObject('name', 'AzureWebJobsStorage', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName')), '2022-09-01').outputs.connectionString.value), createObject('name', 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING', 'value', reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName')), '2022-09-01').outputs.connectionString.value), createObject('name', 'WEBSITE_CONTENTSHARE', 'value', toLower(parameters('name'))), createObject('name', 'APPINSIGHTS_INSTRUMENTATIONKEY', 'value', if(variables('existingAppInsights'), parameters('appInsInstrumentationKey'), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2022-09-01').outputs.instrumentationKey.value)), createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', format('InstrumentationKey={0}', if(variables('existingAppInsights'), parameters('appInsInstrumentationKey'), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2022-09-01').outputs.instrumentationKey.value)))), parameters('funcAppSettings'))), variables('siteConfigAddin'))]",
                         "httpsOnly": true,
                         "clientAffinityEnabled": false,
                         "reserved": "[parameters('linux')]"
@@ -2605,8 +2617,8 @@
                     {
                       "condition": "[variables('createNetworkConfig')]",
                       "type": "Microsoft.Web/sites/networkConfig",
-                      "apiVersion": "2020-06-01",
-                      "name": "[format('{0}/VirtualNetwork', parameters('name'))]",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('{0}/{1}', parameters('name'), 'virtualNetwork')]",
                       "properties": {
                         "subnetResourceId": "[parameters('subnetIdForIntegration')]"
                       },
@@ -2617,8 +2629,8 @@
                     {
                       "condition": "[variables('createSourceControl')]",
                       "type": "Microsoft.Web/sites/sourcecontrols",
-                      "apiVersion": "2020-06-01",
-                      "name": "[format('{0}/web', parameters('name'))]",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('{0}/{1}', parameters('name'), 'web')]",
                       "properties": {
                         "branch": "[parameters('funcDeployBranch')]",
                         "repoUrl": "[parameters('funcDeployRepoUrl')]",
@@ -2631,8 +2643,8 @@
                     {
                       "condition": "[parameters('includeSampleFunction')]",
                       "type": "Microsoft.Web/sites/functions",
-                      "apiVersion": "2020-06-01",
-                      "name": "[format('{0}/sampleFunction', parameters('name'))]",
+                      "apiVersion": "2022-09-01",
+                      "name": "[format('{0}/{1}', parameters('name'), 'sampleFunction')]",
                       "properties": {
                         "config": {
                           "bindings": [
@@ -2663,7 +2675,7 @@
                     },
                     {
                       "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2020-10-01",
+                      "apiVersion": "2022-09-01",
                       "name": "[variables('funcStorageName')]",
                       "properties": {
                         "expressionEvaluationOptions": {
@@ -2687,8 +2699,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.10.61.36676",
-                              "templateHash": "12323776842840638647"
+                              "version": "0.24.24.22086",
+                              "templateHash": "10353758846968854005"
                             }
                           },
                           "parameters": {
@@ -2760,7 +2772,7 @@
                             },
                             "primaryEndpoints": {
                               "type": "object",
-                              "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', toLower(take(replace(parameters('name'), '-', ''), 24)))).primaryEndpoints]"
+                              "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', toLower(take(replace(parameters('name'), '-', ''), 24))), '2019-06-01').primaryEndpoints]"
                             },
                             "connectionString": {
                               "type": "string",
@@ -2771,9 +2783,9 @@
                       }
                     },
                     {
-                      "condition": "[variables('createAppInsights')]",
+                      "condition": "[not(variables('existingAppInsights'))]",
                       "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2020-10-01",
+                      "apiVersion": "2022-09-01",
                       "name": "[variables('funcAppInsName')]",
                       "properties": {
                         "expressionEvaluationOptions": {
@@ -2800,8 +2812,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.10.61.36676",
-                              "templateHash": "5073464841099753282"
+                              "version": "0.24.24.22086",
+                              "templateHash": "2649765130137150666"
                             }
                           },
                           "parameters": {
@@ -2860,7 +2872,7 @@
                             },
                             "instrumentationKey": {
                               "type": "string",
-                              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('name'))).InstrumentationKey]"
+                              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('name')), '2020-02-02-preview').InstrumentationKey]"
                             },
                             "workspaceId": {
                               "type": "string",
@@ -2887,18 +2899,18 @@
                     "identity": {
                       "type": "object",
                       "value": {
-                        "tenantId": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2020-06-01', 'full').identity.tenantId]",
-                        "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2020-06-01', 'full').identity.principalId]",
-                        "type": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2020-06-01', 'full').identity.type]"
+                        "tenantId": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2022-09-01', 'full').identity.tenantId]",
+                        "principalId": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2022-09-01', 'full').identity.principalId]",
+                        "type": "[reference(resourceId('Microsoft.Web/sites', parameters('name')), '2022-09-01', 'full').identity.type]"
                       }
                     },
                     "applicationInsights": {
                       "type": "object",
-                      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2020-10-01').outputs]"
+                      "value": "[if(variables('existingAppInsights'), createObject(), reference(resourceId('Microsoft.Resources/deployments', variables('funcAppInsName')), '2022-09-01'))]"
                     },
                     "storage": {
                       "type": "object",
-                      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName'))).outputs]"
+                      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('funcStorageName')), '2022-09-01')]"
                     }
                   }
                 }
@@ -2909,7 +2921,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-10-01",
+              "apiVersion": "2022-09-01",
               "name": "keyVault",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -2932,8 +2944,8 @@
                   "accessPolicies": {
                     "value": [
                       {
-                        "tenantId": "[reference(resourceId('Microsoft.Resources/deployments', 'ingestFuncApp')).outputs.identity.value.tenantId]",
-                        "objectId": "[reference(resourceId('Microsoft.Resources/deployments', 'ingestFuncApp')).outputs.identity.value.principalId]",
+                        "tenantId": "[reference(resourceId('Microsoft.Resources/deployments', 'ingestFuncApp'), '2022-09-01').outputs.identity.value.tenantId]",
+                        "objectId": "[reference(resourceId('Microsoft.Resources/deployments', 'ingestFuncApp'), '2022-09-01').outputs.identity.value.principalId]",
                         "permissions": {
                           "secrets": [
                             "get"
@@ -2941,8 +2953,8 @@
                         }
                       },
                       {
-                        "tenantId": "[reference(resourceId('Microsoft.Resources/deployments', 'processorFuncApp')).outputs.identity.value.tenantId]",
-                        "objectId": "[reference(resourceId('Microsoft.Resources/deployments', 'processorFuncApp')).outputs.identity.value.principalId]",
+                        "tenantId": "[reference(resourceId('Microsoft.Resources/deployments', 'processorFuncApp'), '2022-09-01').outputs.identity.value.tenantId]",
+                        "objectId": "[reference(resourceId('Microsoft.Resources/deployments', 'processorFuncApp'), '2022-09-01').outputs.identity.value.principalId]",
                         "permissions": {
                           "secrets": [
                             "get"
@@ -2950,8 +2962,8 @@
                         }
                       },
                       {
-                        "tenantId": "[reference(resourceId('Microsoft.Resources/deployments', 'notifierFuncApp')).outputs.identity.value.tenantId]",
-                        "objectId": "[reference(resourceId('Microsoft.Resources/deployments', 'notifierFuncApp')).outputs.identity.value.principalId]",
+                        "tenantId": "[reference(resourceId('Microsoft.Resources/deployments', 'notifierFuncApp'), '2022-09-01').outputs.identity.value.tenantId]",
+                        "objectId": "[reference(resourceId('Microsoft.Resources/deployments', 'notifierFuncApp'), '2022-09-01').outputs.identity.value.principalId]",
                         "permissions": {
                           "secrets": [
                             "get"
@@ -2964,15 +2976,15 @@
                     "value": [
                       {
                         "name": "[variables('secretNames').dataStorageConnectionString]",
-                        "value": "[reference(resourceId('Microsoft.Resources/deployments', 'dataStorageAccount')).outputs.connectionString.value]"
+                        "value": "[reference(resourceId('Microsoft.Resources/deployments', 'dataStorageAccount'), '2022-09-01').outputs.connectionString.value]"
                       },
                       {
                         "name": "[variables('secretNames').serviceBusConnectionString]",
-                        "value": "[reference(resourceId('Microsoft.Resources/deployments', 'serviceBus')).outputs.connectionString.value]"
+                        "value": "[reference(resourceId('Microsoft.Resources/deployments', 'serviceBus'), '2022-09-01').outputs.connectionString.value]"
                       },
                       {
                         "name": "[variables('secretNames').eventHubsNamespaceConnectionString]",
-                        "value": "[reference(resourceId('Microsoft.Resources/deployments', 'eventHub')).outputs.namespaceConnectionString.value]"
+                        "value": "[reference(resourceId('Microsoft.Resources/deployments', 'eventHub'), '2022-09-01').outputs.namespaceConnectionString.value]"
                       },
                       {
                         "name": "[variables('secretNames').sendGridApiKey]",
@@ -2987,8 +2999,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.10.61.36676",
-                      "templateHash": "6282288045634642457"
+                      "version": "0.24.24.22086",
+                      "templateHash": "1527608726200560139"
                     }
                   },
                   "parameters": {
@@ -3045,7 +3057,7 @@
                     {
                       "condition": "[not(empty(parameters('secrets')))]",
                       "type": "Microsoft.Resources/deployments",
-                      "apiVersion": "2020-10-01",
+                      "apiVersion": "2022-09-01",
                       "name": "keyvault-secrets",
                       "properties": {
                         "expressionEvaluationOptions": {
@@ -3066,8 +3078,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.10.61.36676",
-                              "templateHash": "17912013837209069553"
+                              "version": "0.24.24.22086",
+                              "templateHash": "8122973725895874798"
                             }
                           },
                           "parameters": {
@@ -3104,7 +3116,7 @@
                                   "id": "[resourceId('Microsoft.KeyVault/vaults/secrets', split(format('{0}/{1}', parameters('keyVaultName'), parameters('secrets')[copyIndex()].name), '/')[0], split(format('{0}/{1}', parameters('keyVaultName'), parameters('secrets')[copyIndex()].name), '/')[1])]",
                                   "name": "[format('{0}/{1}', parameters('keyVaultName'), parameters('secrets')[copyIndex()].name)]",
                                   "type": "Microsoft.KeyVault/vaults/secrets",
-                                  "props": "[reference(resourceId('Microsoft.KeyVault/vaults/secrets', split(format('{0}/{1}', parameters('keyVaultName'), parameters('secrets')[copyIndex()].name), '/')[0], split(format('{0}/{1}', parameters('keyVaultName'), parameters('secrets')[copyIndex()].name), '/')[1]))]",
+                                  "props": "[reference(resourceId('Microsoft.KeyVault/vaults/secrets', split(format('{0}/{1}', parameters('keyVaultName'), parameters('secrets')[copyIndex()].name), '/')[0], split(format('{0}/{1}', parameters('keyVaultName'), parameters('secrets')[copyIndex()].name), '/')[1]), '2018-02-14')]",
                                   "reference": "[format('@Microsoft.KeyVault(VaultName={0};SecretName:{1}', parameters('keyVaultName'), format('{0}/{1}', parameters('keyVaultName'), parameters('secrets')[copyIndex()].name))]"
                                 }
                               }
@@ -3128,7 +3140,7 @@
                     },
                     "secrets": {
                       "type": "array",
-                      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'keyvault-secrets'), '2020-10-01').outputs.secrets.value]"
+                      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'keyvault-secrets'), '2022-09-01').outputs.secrets.value]"
                     }
                   }
                 }
@@ -3144,7 +3156,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-10-01",
+              "apiVersion": "2022-09-01",
               "name": "eventHub",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -3177,8 +3189,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.10.61.36676",
-                      "templateHash": "7167843609178895620"
+                      "version": "0.24.24.22086",
+                      "templateHash": "4187286121343644816"
                     }
                   },
                   "parameters": {
@@ -3243,7 +3255,7 @@
                     {
                       "type": "Microsoft.EventHub/namespaces/authorizationRules",
                       "apiVersion": "2021-06-01-preview",
-                      "name": "[format('{0}/AppAuthRule', parameters('name'))]",
+                      "name": "[format('{0}/{1}', parameters('name'), 'AppAuthRule')]",
                       "properties": {
                         "rights": [
                           "Listen",
@@ -3257,10 +3269,10 @@
                     {
                       "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
                       "apiVersion": "2021-06-01-preview",
-                      "name": "[format('{0}/{1}', format('{0}/{1}', parameters('name'), parameters('eventHubName')), parameters('consumerGroupName'))]",
+                      "name": "[format('{0}/{1}/{2}', parameters('name'), parameters('eventHubName'), parameters('consumerGroupName'))]",
                       "properties": {},
                       "dependsOn": [
-                        "[resourceId('Microsoft.EventHub/namespaces/eventhubs', split(format('{0}/{1}', parameters('name'), parameters('eventHubName')), '/')[0], split(format('{0}/{1}', parameters('name'), parameters('eventHubName')), '/')[1])]"
+                        "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('name'), parameters('eventHubName'))]"
                       ]
                     }
                   ],
@@ -3271,11 +3283,11 @@
                     },
                     "eventHubId": {
                       "type": "string",
-                      "value": "[resourceId('Microsoft.EventHub/namespaces/eventhubs', split(format('{0}/{1}', parameters('name'), parameters('eventHubName')), '/')[0], split(format('{0}/{1}', parameters('name'), parameters('eventHubName')), '/')[1])]"
+                      "value": "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('name'), parameters('eventHubName'))]"
                     },
                     "namespaceConnectionString": {
                       "type": "string",
-                      "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', split(format('{0}/AppAuthRule', parameters('name')), '/')[0], split(format('{0}/AppAuthRule', parameters('name')), '/')[1]), '2021-06-01-preview').primaryConnectionString]"
+                      "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('name'), 'AppAuthRule'), '2021-06-01-preview').primaryConnectionString]"
                     }
                   }
                 }
@@ -3283,7 +3295,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-10-01",
+              "apiVersion": "2022-09-01",
               "name": "serviceBus",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -3294,9 +3306,7 @@
                   "location": {
                     "value": "[parameters('location')]"
                   },
-                  "skuName": {
-                    "value": "[if(equals(parameters('environmentType'), 'dev'), 'Standard', 'Premium')]"
-                  },
+                  "skuName": "[if(equals(parameters('environmentType'), 'dev'), createObject('value', 'Standard'), createObject('value', 'Premium'))]",
                   "name": {
                     "value": "[variables('resourceNames').serviceBusNamespace]"
                   },
@@ -3310,8 +3320,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.10.61.36676",
-                      "templateHash": "1928496237289620644"
+                      "version": "0.24.24.22086",
+                      "templateHash": "3935811594901885971"
                     }
                   },
                   "parameters": {
@@ -3414,7 +3424,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-10-01",
+              "apiVersion": "2022-09-01",
               "name": "containerRegistry",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -3438,8 +3448,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.10.61.36676",
-                      "templateHash": "17514719230822252207"
+                      "version": "0.24.24.22086",
+                      "templateHash": "15087859590768711641"
                     }
                   },
                   "parameters": {
@@ -3480,7 +3490,7 @@
                     },
                     "loginServer": {
                       "type": "string",
-                      "value": "[reference(resourceId('Microsoft.ContainerRegistry/registries', parameters('name'))).loginServer]"
+                      "value": "[reference(resourceId('Microsoft.ContainerRegistry/registries', parameters('name')), '2021-06-01-preview').loginServer]"
                     },
                     "adminUserName": {
                       "type": "string",
@@ -3496,7 +3506,7 @@
             },
             {
               "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2020-10-01",
+              "apiVersion": "2022-09-01",
               "name": "streamAnalyticsJob",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -3523,8 +3533,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.10.61.36676",
-                      "templateHash": "2539908660944758733"
+                      "version": "0.24.24.22086",
+                      "templateHash": "11989123201163041225"
                     }
                   },
                   "parameters": {
@@ -3541,17 +3551,14 @@
                     },
                     "name": {
                       "type": "string",
+                      "minLength": 3,
+                      "maxLength": 63,
                       "metadata": {
                         "description": "Stream Analytics Job Name, can contain alphanumeric characters and hypen and must be 3-63 characters long"
-                      },
-                      "maxLength": 63,
-                      "minLength": 3
+                      }
                     },
                     "numberOfStreamingUnits": {
                       "type": "int",
-                      "metadata": {
-                        "description": "Number of Streaming Units"
-                      },
                       "allowedValues": [
                         1,
                         3,
@@ -3564,8 +3571,11 @@
                         42,
                         48
                       ],
+                      "minValue": 1,
                       "maxValue": 48,
-                      "minValue": 1
+                      "metadata": {
+                        "description": "Number of Streaming Units"
+                      }
                     }
                   },
                   "resources": [
@@ -3601,19 +3611,19 @@
           "outputs": {
             "storageAccountName": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'dataStorageAccount')).outputs.name.value]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'dataStorageAccount'), '2022-09-01').outputs.name.value]"
             },
             "ingestorFunctionAppName": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'ingestFuncApp')).outputs.name.value]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'ingestFuncApp'), '2022-09-01').outputs.name.value]"
             },
             "processorFunctionAppName": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'processorFuncApp')).outputs.name.value]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'processorFuncApp'), '2022-09-01').outputs.name.value]"
             },
             "notifierFunctionAppName": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'notifierFuncApp')).outputs.name.value]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', 'notifierFuncApp'), '2022-09-01').outputs.name.value]"
             }
           }
         }
@@ -3635,19 +3645,19 @@
     },
     "storageAccountName": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('rg-{0}-{1}', parameters('applicationName'), parameters('environment'))), 'Microsoft.Resources/deployments', 'MainDeployment')).outputs.storageAccountName.value]"
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('rg-{0}-{1}', parameters('applicationName'), parameters('environment'))), 'Microsoft.Resources/deployments', 'MainDeployment'), '2022-09-01').outputs.storageAccountName.value]"
     },
     "ingestorFunctionAppName": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('rg-{0}-{1}', parameters('applicationName'), parameters('environment'))), 'Microsoft.Resources/deployments', 'MainDeployment')).outputs.ingestorFunctionAppName.value]"
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('rg-{0}-{1}', parameters('applicationName'), parameters('environment'))), 'Microsoft.Resources/deployments', 'MainDeployment'), '2022-09-01').outputs.ingestorFunctionAppName.value]"
     },
     "processorFunctionAppName": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('rg-{0}-{1}', parameters('applicationName'), parameters('environment'))), 'Microsoft.Resources/deployments', 'MainDeployment')).outputs.processorFunctionAppName.value]"
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('rg-{0}-{1}', parameters('applicationName'), parameters('environment'))), 'Microsoft.Resources/deployments', 'MainDeployment'), '2022-09-01').outputs.processorFunctionAppName.value]"
     },
     "notifierFunctionAppName": {
       "type": "string",
-      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('rg-{0}-{1}', parameters('applicationName'), parameters('environment'))), 'Microsoft.Resources/deployments', 'MainDeployment')).outputs.notifierFunctionAppName.value]"
+      "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, format('rg-{0}-{1}', parameters('applicationName'), parameters('environment'))), 'Microsoft.Resources/deployments', 'MainDeployment'), '2022-09-01').outputs.notifierFunctionAppName.value]"
     }
   }
 }
